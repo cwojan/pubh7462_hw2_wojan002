@@ -16,6 +16,7 @@ Data exploration code is hidden, but data cleaning code is presented below:
 library(tidyverse)
 library(DataExplorer)
 library(janitor)
+library(gt)
 
 ## Set knitr options
 knitr::opts_chunk$set(echo = TRUE)
@@ -54,17 +55,19 @@ brfss_clean <- clean_names(brfss_data)
 brfss_clean <- brfss_clean %>%
   separate(col = locationdesc, into = c("state", "county"), sep = " - ") %>%
   filter(topic %in% "Overall Health") %>%
-  select(year, state, county, response, sample_size, data_value)
+  select(year, state, county, response, sample_size, data_value) %>%
+  rename(num_respondents = sample_size,
+         percent = data_value)
 
 ## Check if column types need to be reformatted
 str(brfss_clean)
 
 ## Format variables that represent categories as factors
+## (I decided not to factorize "county" because county names may be shared across states,
+## having FIPS would be better)
 brfss_clean <- brfss_clean %>%
   mutate(
     state = factor(state),
-    county = str_remove(county, " County") %>%
-      factor(),
     response = factor(response)
   )
 
@@ -96,8 +99,9 @@ Variable                  | Description
 
 ```{r prob_3.3.1, echo = TRUE}
 
+## Create a subset of the data that represent county locations
 brfss_331 <- brfss_clean %>%
-  filter(year == 2004) %>%
+  filter(year %in% 2004) %>%
   select(year, state, county) %>%
   distinct()
 
@@ -106,6 +110,50 @@ brfss_331 <- brfss_clean %>%
 The following states featured 6 surveyed counties (or locations): `r names(which(summary(brfss_331$state) == 6))`
 
 #### 3.3.2
+
+```{r prob_3.3.2, echo = TRUE}
+
+## Draw a plot of observed counties by year, spearated by state
+brfss_clean %>%
+  select(year, state, county) %>%
+  distinct() %>%
+  count(state, year, name = "counties") %>%
+  mutate(state = fct_reorder(state, counties, .fun = mean, .desc = TRUE)) %>%
+  ggplot() +
+    geom_line(aes(x = year, y = counties, color = state)) +
+    guides(color = guide_legend(title = "State", nrow = 3, byrow = TRUE)) +
+    labs(x = "Year", y = "Number of Counties", title = "Number of Counties Observed by Year") +
+    theme(legend.title = element_text(size = 10),
+          legend.text = element_text(size = 7),
+          legend.key.width = unit(2,"mm"),
+          legend.key.height = unit(1, "mm"))
+
+```
+
+The state with the highest mean number of counties observed via survey is New Jersey, with Florida having the second highest. Overall the number of counties observed in each state seems to increase slightly over time. Florida exhibits a strange pattern where 40+ counties were observed in 2007 and 2010.
+
+#### 3.3.3
+
+```{r prob_3.3.3, echo = TRUE, message = FALSE}
+
+## Create a gt table of summarized, select health responses for MN in select years
+brfss_clean %>%
+  filter(year %in% c(2002, 2006, 2010), state %in% "MN", 
+         response %in% c("Excellent", "Good", "Poor")) %>%
+  group_by(year, response) %>%
+  summarize(mean_num = mean(num_respondents, na.rm = TRUE),
+            sd_num = sd(num_respondents, na.rm = TRUE),
+            mean_percent = mean(percent, na.rm = TRUE),
+            sd_percent = sd(percent, na.rm = TRUE)) %>%
+  gt() %>%
+  tab_header("Summary of Selected Health Responses in MN (2002, 2006, & 2010)")
+
+```
+Overall, the three different years show fairly similar results for each response type. Across years, "Poor" responses comprise 2-2.5% of responses averaged across MN, while "Excellent" and "Good" each comprise about a quarter of responses. Finally, the proportion of "Excellent" responses appears to vary more widely from county to county in MN as compared to "Good and "Poor" responses, as evidenced by the consistently higher standard deviation observed.
+
+### 3.3.4
+
+
 
 
 
