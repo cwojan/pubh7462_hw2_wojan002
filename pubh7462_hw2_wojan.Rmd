@@ -53,9 +53,15 @@ brfss_clean <- clean_names(brfss_data)
 
 ## Subset the data that we are interested in
 brfss_clean <- brfss_clean %>%
-  separate(col = locationdesc, into = c("state", "county"), sep = " - ") %>%
+  ## First separate location description into state and county
+  ## (because the problem says county needs to be "extracted")
+  ## ("state" is a double of location abbreviation, but that is excluded later)
+  separate(col = locationdesc, into = c("state", "county"), sep = " - ") %>% 
+  ## Then filter only by the Overall Health question
   filter(topic %in% "Overall Health") %>%
+  ## Select only the columns of interest
   select(year, state, county, response, sample_size, data_value) %>%
+  ## Rename the value variables more meaningfully
   rename(num_respondents = sample_size,
          percent = data_value)
 
@@ -99,10 +105,13 @@ Variable                  | Description
 
 ```{r prob_3.3.1, echo = TRUE}
 
-## Create a subset of the data that represent county locations
+## Create a subset of the data that represent county locations by year and state
 brfss_331 <- brfss_clean %>%
+  ## Filter only data from 2004
   filter(year %in% 2004) %>%
+  ## Exclude the response types and values
   select(year, state, county) %>%
+  ## "Collapse" the data into only unique rows
   distinct()
 
 ```
@@ -113,12 +122,17 @@ The following states featured 6 surveyed counties (or locations): `r names(which
 
 ```{r prob_3.3.2, echo = TRUE}
 
-## Draw a plot of observed counties by year, spearated by state
+## Draw a plot of observed counties by year, separated by state
 brfss_clean %>%
-  select(year, state, county) %>%
+  ## Take only the year, state, and county observed
+  select(year, state, county) %>% 
+  ## And only the unique combinations
   distinct() %>%
+  ## Count all counties observed by state and year
   count(state, year, name = "counties") %>%
+  ## Reorder the state factor by mean number of counties observed over time
   mutate(state = fct_reorder(state, counties, .fun = mean, .desc = TRUE)) %>%
+  ## Start drawing plot
   ggplot() +
     geom_line(aes(x = year, y = counties, color = state)) +
     guides(color = guide_legend(title = "State", nrow = 3, byrow = TRUE)) +
@@ -138,13 +152,17 @@ The state with the highest mean number of counties observed via survey is New Je
 
 ## Create a gt table of summarized, select health responses for MN in select years
 brfss_clean %>%
+  ## Filter only MN data from 2002, 2006, and 2004; of only three response types
   filter(year %in% c(2002, 2006, 2010), state %in% "MN", 
          response %in% c("Excellent", "Good", "Poor")) %>%
+  ## For each year, find the mean and SD of respondent number and percent for each response type
+  ## (across all counties in MN)
   group_by(year, response) %>%
   summarize(mean_num = mean(num_respondents, na.rm = TRUE),
             sd_num = sd(num_respondents, na.rm = TRUE),
             mean_percent = mean(percent, na.rm = TRUE),
             sd_percent = sd(percent, na.rm = TRUE)) %>%
+  ## Display in table
   gt() %>%
   tab_header("Summary of Selected Health Responses in MN (2002, 2006, & 2010)")
 
@@ -153,7 +171,42 @@ Overall, the three different years show fairly similar results for each response
 
 ### 3.3.4
 
+Note: two plots are included because displaying two types of numeric values that aren't a one-to-one transformation (in this case raw numbers and percentages) is not advised.
 
+```{r prob_3.3.4, echo = TRUE}
+
+## Draw a plot of number of respondents for select health responses, select years, in MN
+brfss_clean %>%
+  ## Filter only MN data from 2002, 2006, and 2004; of only three response types
+  filter(year %in% c(2002, 2006, 2010), state %in% "MN", 
+         response %in% c("Excellent", "Good", "Poor")) %>%
+  ## Start drawing plot
+  ggplot() +
+    geom_jitter(aes(x = response, y = num_respondents, color = response)) +
+    geom_boxplot(aes(x = response, y = num_respondents, fill = response), alpha = 0.4) +
+    facet_wrap(vars(year)) +
+    labs(x = "Response Type", y = "Number of Respondents", 
+         title = "Number of Selected Health Responses in Minnesota by Year") +
+    guides(color = guide_legend(title = "Response Type"),
+           fill = guide_legend(title = "Response Type"))
+
+## Draw a plot of percent of respondents for select health responses, select years, in MN
+brfss_clean %>%
+  ## Filter only MN data from 2002, 2006, and 2004; of only three response types
+  filter(year %in% c(2002, 2006, 2010), state %in% "MN", 
+         response %in% c("Excellent", "Good", "Poor")) %>%
+  ## Start drawing plot
+  ggplot() +
+    geom_jitter(aes(x = response, y = percent, color = response)) +
+    geom_boxplot(aes(x = response, y = percent, fill = response), alpha = 0.4) +
+    facet_wrap(vars(year)) +
+    labs(x = "Response Type", y = "Percent of Respondents", 
+         title = "Percent of Selected Health Responses in Minnesota by Year") +
+    guides(color = guide_legend(title = "Response Type"),
+           fill = guide_legend(title = "Response Type"))
+  
+
+```
 
 
 

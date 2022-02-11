@@ -18,9 +18,15 @@ brfss_clean <- clean_names(brfss_data)
 
 ## Subset the data that we are interested in
 brfss_clean <- brfss_clean %>%
-  separate(col = locationdesc, into = c("state", "county"), sep = " - ") %>%
+  ## First separate location description into state and county
+  ## (because the problem says county needs to be "extracted")
+  ## ("state" is a double of location abbreviation, but that is excluded later)
+  separate(col = locationdesc, into = c("state", "county"), sep = " - ") %>% 
+  ## Then filter only by the Overall Health question
   filter(topic %in% "Overall Health") %>%
+  ## Select only the columns of interest
   select(year, state, county, response, sample_size, data_value) %>%
+  ## Rename the value variables more meaningfully
   rename(num_respondents = sample_size,
          percent = data_value)
 
@@ -68,10 +74,13 @@ given state, county and year. The variables are as follows:
 #### 3.3.1
 
 ``` r
-## Create a subset of the data that represent county locations
+## Create a subset of the data that represent county locations by year and state
 brfss_331 <- brfss_clean %>%
+  ## Filter only data from 2004
   filter(year %in% 2004) %>%
+  ## Exclude the response types and values
   select(year, state, county) %>%
+  ## "Collapse" the data into only unique rows
   distinct()
 ```
 
@@ -81,12 +90,17 @@ CT, MD, NM, SC, TX, UT, VT
 #### 3.3.2
 
 ``` r
-## Draw a plot of observed counties by year, spearated by state
+## Draw a plot of observed counties by year, separated by state
 brfss_clean %>%
-  select(year, state, county) %>%
+  ## Take only the year, state, and county observed
+  select(year, state, county) %>% 
+  ## And only the unique combinations
   distinct() %>%
+  ## Count all counties observed by state and year
   count(state, year, name = "counties") %>%
+  ## Reorder the state factor by mean number of counties observed over time
   mutate(state = fct_reorder(state, counties, .fun = mean, .desc = TRUE)) %>%
+  ## Start drawing plot
   ggplot() +
     geom_line(aes(x = year, y = counties, color = state)) +
     guides(color = guide_legend(title = "State", nrow = 3, byrow = TRUE)) +
@@ -110,23 +124,27 @@ observed in 2007 and 2010.
 ``` r
 ## Create a gt table of summarized, select health responses for MN in select years
 brfss_clean %>%
+  ## Filter only MN data from 2002, 2006, and 2004; of only three response types
   filter(year %in% c(2002, 2006, 2010), state %in% "MN", 
          response %in% c("Excellent", "Good", "Poor")) %>%
+  ## For each year, find the mean and SD of respondent number and percent for each response type
+  ## (across all counties in MN)
   group_by(year, response) %>%
   summarize(mean_num = mean(num_respondents, na.rm = TRUE),
             sd_num = sd(num_respondents, na.rm = TRUE),
             mean_percent = mean(percent, na.rm = TRUE),
             sd_percent = sd(percent, na.rm = TRUE)) %>%
+  ## Display in table
   gt() %>%
   tab_header("Summary of Selected Health Responses in MN (2002, 2006, & 2010)")
 ```
 
-<div id="ngkjaqabxy" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="hvnaxhluuv" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#ngkjaqabxy .gt_table {
+#hvnaxhluuv .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -151,7 +169,7 @@ brfss_clean %>%
   border-left-color: #D3D3D3;
 }
 
-#ngkjaqabxy .gt_heading {
+#hvnaxhluuv .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -163,7 +181,7 @@ brfss_clean %>%
   border-right-color: #D3D3D3;
 }
 
-#ngkjaqabxy .gt_title {
+#hvnaxhluuv .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -173,7 +191,7 @@ brfss_clean %>%
   border-bottom-width: 0;
 }
 
-#ngkjaqabxy .gt_subtitle {
+#hvnaxhluuv .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -183,13 +201,13 @@ brfss_clean %>%
   border-top-width: 0;
 }
 
-#ngkjaqabxy .gt_bottom_border {
+#hvnaxhluuv .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#ngkjaqabxy .gt_col_headings {
+#hvnaxhluuv .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -204,7 +222,7 @@ brfss_clean %>%
   border-right-color: #D3D3D3;
 }
 
-#ngkjaqabxy .gt_col_heading {
+#hvnaxhluuv .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -224,7 +242,7 @@ brfss_clean %>%
   overflow-x: hidden;
 }
 
-#ngkjaqabxy .gt_column_spanner_outer {
+#hvnaxhluuv .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -236,15 +254,15 @@ brfss_clean %>%
   padding-right: 4px;
 }
 
-#ngkjaqabxy .gt_column_spanner_outer:first-child {
+#hvnaxhluuv .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#ngkjaqabxy .gt_column_spanner_outer:last-child {
+#hvnaxhluuv .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#ngkjaqabxy .gt_column_spanner {
+#hvnaxhluuv .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -256,7 +274,7 @@ brfss_clean %>%
   width: 100%;
 }
 
-#ngkjaqabxy .gt_group_heading {
+#hvnaxhluuv .gt_group_heading {
   padding: 8px;
   color: #333333;
   background-color: #FFFFFF;
@@ -278,7 +296,7 @@ brfss_clean %>%
   vertical-align: middle;
 }
 
-#ngkjaqabxy .gt_empty_group_heading {
+#hvnaxhluuv .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -293,15 +311,15 @@ brfss_clean %>%
   vertical-align: middle;
 }
 
-#ngkjaqabxy .gt_from_md > :first-child {
+#hvnaxhluuv .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#ngkjaqabxy .gt_from_md > :last-child {
+#hvnaxhluuv .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#ngkjaqabxy .gt_row {
+#hvnaxhluuv .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -320,7 +338,7 @@ brfss_clean %>%
   overflow-x: hidden;
 }
 
-#ngkjaqabxy .gt_stub {
+#hvnaxhluuv .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -332,7 +350,7 @@ brfss_clean %>%
   padding-left: 12px;
 }
 
-#ngkjaqabxy .gt_summary_row {
+#hvnaxhluuv .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -342,7 +360,7 @@ brfss_clean %>%
   padding-right: 5px;
 }
 
-#ngkjaqabxy .gt_first_summary_row {
+#hvnaxhluuv .gt_first_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -352,7 +370,7 @@ brfss_clean %>%
   border-top-color: #D3D3D3;
 }
 
-#ngkjaqabxy .gt_grand_summary_row {
+#hvnaxhluuv .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -362,7 +380,7 @@ brfss_clean %>%
   padding-right: 5px;
 }
 
-#ngkjaqabxy .gt_first_grand_summary_row {
+#hvnaxhluuv .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -372,11 +390,11 @@ brfss_clean %>%
   border-top-color: #D3D3D3;
 }
 
-#ngkjaqabxy .gt_striped {
+#hvnaxhluuv .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#ngkjaqabxy .gt_table_body {
+#hvnaxhluuv .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -385,7 +403,7 @@ brfss_clean %>%
   border-bottom-color: #D3D3D3;
 }
 
-#ngkjaqabxy .gt_footnotes {
+#hvnaxhluuv .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -399,13 +417,13 @@ brfss_clean %>%
   border-right-color: #D3D3D3;
 }
 
-#ngkjaqabxy .gt_footnote {
+#hvnaxhluuv .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding: 4px;
 }
 
-#ngkjaqabxy .gt_sourcenotes {
+#hvnaxhluuv .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -419,41 +437,41 @@ brfss_clean %>%
   border-right-color: #D3D3D3;
 }
 
-#ngkjaqabxy .gt_sourcenote {
+#hvnaxhluuv .gt_sourcenote {
   font-size: 90%;
   padding: 4px;
 }
 
-#ngkjaqabxy .gt_left {
+#hvnaxhluuv .gt_left {
   text-align: left;
 }
 
-#ngkjaqabxy .gt_center {
+#hvnaxhluuv .gt_center {
   text-align: center;
 }
 
-#ngkjaqabxy .gt_right {
+#hvnaxhluuv .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#ngkjaqabxy .gt_font_normal {
+#hvnaxhluuv .gt_font_normal {
   font-weight: normal;
 }
 
-#ngkjaqabxy .gt_font_bold {
+#hvnaxhluuv .gt_font_bold {
   font-weight: bold;
 }
 
-#ngkjaqabxy .gt_font_italic {
+#hvnaxhluuv .gt_font_italic {
   font-style: italic;
 }
 
-#ngkjaqabxy .gt_super {
+#hvnaxhluuv .gt_super {
   font-size: 65%;
 }
 
-#ngkjaqabxy .gt_footnote_marks {
+#hvnaxhluuv .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 65%;
@@ -545,3 +563,45 @@ compared to “Good and”Poor” responses, as evidenced by the consistently
 higher standard deviation observed.
 
 ### 3.3.4
+
+Note: two plots are included because displaying two types of numeric
+values that aren’t a one-to-one transformation (in this case raw numbers
+and percentages) is not advised.
+
+``` r
+## Draw a plot of number of respondents for select health responses, select years, in MN
+brfss_clean %>%
+  ## Filter only MN data from 2002, 2006, and 2004; of only three response types
+  filter(year %in% c(2002, 2006, 2010), state %in% "MN", 
+         response %in% c("Excellent", "Good", "Poor")) %>%
+  ## Start drawing plot
+  ggplot() +
+    geom_jitter(aes(x = response, y = num_respondents, color = response)) +
+    geom_boxplot(aes(x = response, y = num_respondents, fill = response), alpha = 0.4) +
+    facet_wrap(vars(year)) +
+    labs(x = "Response Type", y = "Number of Respondents", 
+         title = "Number of Selected Health Responses in Minnesota by Year") +
+    guides(color = guide_legend(title = "Response Type"),
+           fill = guide_legend(title = "Response Type"))
+```
+
+![](pubh7462_hw2_wojan_files/figure-gfm/prob_3.3.4-1.png)<!-- -->
+
+``` r
+## Draw a plot of percent of respondents for select health responses, select years, in MN
+brfss_clean %>%
+  ## Filter only MN data from 2002, 2006, and 2004; of only three response types
+  filter(year %in% c(2002, 2006, 2010), state %in% "MN", 
+         response %in% c("Excellent", "Good", "Poor")) %>%
+  ## Start drawing plot
+  ggplot() +
+    geom_jitter(aes(x = response, y = percent, color = response)) +
+    geom_boxplot(aes(x = response, y = percent, fill = response), alpha = 0.4) +
+    facet_wrap(vars(year)) +
+    labs(x = "Response Type", y = "Percent of Respondents", 
+         title = "Percent of Selected Health Responses in Minnesota by Year") +
+    guides(color = guide_legend(title = "Response Type"),
+           fill = guide_legend(title = "Response Type"))
+```
+
+![](pubh7462_hw2_wojan_files/figure-gfm/prob_3.3.4-2.png)<!-- -->
