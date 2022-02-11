@@ -168,7 +168,8 @@ brfss_clean %>%
             sd_percent = sd(percent, na.rm = TRUE)) %>%
   ## Display in table
   gt() %>%
-  tab_header("Summary of Selected Health Responses in MN (2002, 2006, & 2010)")
+  tab_header("Summary of Selected Health Responses in MN (2002, 2006, & 2010)") %>%
+  as_raw_html()
 
 ```
 Overall, the three different years show fairly similar results for each response type. Across years, "Poor" responses comprise 2-2.5% of responses averaged across MN, while "Excellent" and "Good" each comprise about a quarter of responses. Finally, the proportion of "Excellent" responses appears to vary more widely from county to county in MN as compared to "Good and "Poor" responses, as evidenced by the consistently higher standard deviation observed.
