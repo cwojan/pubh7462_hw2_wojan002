@@ -84,8 +84,8 @@ brfss_331 <- brfss_clean %>%
   distinct()
 ```
 
-The following states featured 6 surveyed counties (or locations): CO,
-CT, MD, NM, SC, TX, UT, VT
+The following states featured 6 surveyed counties (or locations) in
+2004: CO, CT, MD, NM, SC, TX, UT, VT
 
 #### 3.3.2
 
@@ -117,7 +117,7 @@ The state with the highest mean number of counties observed via survey
 is New Jersey, with Florida having the second highest. Overall the
 number of counties observed in each state seems to increase slightly
 over time. Florida exhibits a strange pattern where 40+ counties were
-observed in 2007 and 2010.
+observed in 2007 and 2010, which is many more than usual.
 
 #### 3.3.3
 
@@ -139,12 +139,12 @@ brfss_clean %>%
   tab_header("Summary of Selected Health Responses in MN (2002, 2006, & 2010)")
 ```
 
-<div id="hvnaxhluuv" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="qxczbnmwnk" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#hvnaxhluuv .gt_table {
+#qxczbnmwnk .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -169,7 +169,7 @@ brfss_clean %>%
   border-left-color: #D3D3D3;
 }
 
-#hvnaxhluuv .gt_heading {
+#qxczbnmwnk .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -181,7 +181,7 @@ brfss_clean %>%
   border-right-color: #D3D3D3;
 }
 
-#hvnaxhluuv .gt_title {
+#qxczbnmwnk .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -191,7 +191,7 @@ brfss_clean %>%
   border-bottom-width: 0;
 }
 
-#hvnaxhluuv .gt_subtitle {
+#qxczbnmwnk .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -201,13 +201,13 @@ brfss_clean %>%
   border-top-width: 0;
 }
 
-#hvnaxhluuv .gt_bottom_border {
+#qxczbnmwnk .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#hvnaxhluuv .gt_col_headings {
+#qxczbnmwnk .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -222,7 +222,7 @@ brfss_clean %>%
   border-right-color: #D3D3D3;
 }
 
-#hvnaxhluuv .gt_col_heading {
+#qxczbnmwnk .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -242,7 +242,7 @@ brfss_clean %>%
   overflow-x: hidden;
 }
 
-#hvnaxhluuv .gt_column_spanner_outer {
+#qxczbnmwnk .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -254,15 +254,15 @@ brfss_clean %>%
   padding-right: 4px;
 }
 
-#hvnaxhluuv .gt_column_spanner_outer:first-child {
+#qxczbnmwnk .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#hvnaxhluuv .gt_column_spanner_outer:last-child {
+#qxczbnmwnk .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#hvnaxhluuv .gt_column_spanner {
+#qxczbnmwnk .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -274,7 +274,7 @@ brfss_clean %>%
   width: 100%;
 }
 
-#hvnaxhluuv .gt_group_heading {
+#qxczbnmwnk .gt_group_heading {
   padding: 8px;
   color: #333333;
   background-color: #FFFFFF;
@@ -296,7 +296,7 @@ brfss_clean %>%
   vertical-align: middle;
 }
 
-#hvnaxhluuv .gt_empty_group_heading {
+#qxczbnmwnk .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -311,15 +311,15 @@ brfss_clean %>%
   vertical-align: middle;
 }
 
-#hvnaxhluuv .gt_from_md > :first-child {
+#qxczbnmwnk .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#hvnaxhluuv .gt_from_md > :last-child {
+#qxczbnmwnk .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#hvnaxhluuv .gt_row {
+#qxczbnmwnk .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -338,7 +338,7 @@ brfss_clean %>%
   overflow-x: hidden;
 }
 
-#hvnaxhluuv .gt_stub {
+#qxczbnmwnk .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -350,7 +350,7 @@ brfss_clean %>%
   padding-left: 12px;
 }
 
-#hvnaxhluuv .gt_summary_row {
+#qxczbnmwnk .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -360,7 +360,7 @@ brfss_clean %>%
   padding-right: 5px;
 }
 
-#hvnaxhluuv .gt_first_summary_row {
+#qxczbnmwnk .gt_first_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -370,7 +370,7 @@ brfss_clean %>%
   border-top-color: #D3D3D3;
 }
 
-#hvnaxhluuv .gt_grand_summary_row {
+#qxczbnmwnk .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -380,7 +380,7 @@ brfss_clean %>%
   padding-right: 5px;
 }
 
-#hvnaxhluuv .gt_first_grand_summary_row {
+#qxczbnmwnk .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -390,11 +390,11 @@ brfss_clean %>%
   border-top-color: #D3D3D3;
 }
 
-#hvnaxhluuv .gt_striped {
+#qxczbnmwnk .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#hvnaxhluuv .gt_table_body {
+#qxczbnmwnk .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -403,7 +403,7 @@ brfss_clean %>%
   border-bottom-color: #D3D3D3;
 }
 
-#hvnaxhluuv .gt_footnotes {
+#qxczbnmwnk .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -417,13 +417,13 @@ brfss_clean %>%
   border-right-color: #D3D3D3;
 }
 
-#hvnaxhluuv .gt_footnote {
+#qxczbnmwnk .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding: 4px;
 }
 
-#hvnaxhluuv .gt_sourcenotes {
+#qxczbnmwnk .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -437,41 +437,41 @@ brfss_clean %>%
   border-right-color: #D3D3D3;
 }
 
-#hvnaxhluuv .gt_sourcenote {
+#qxczbnmwnk .gt_sourcenote {
   font-size: 90%;
   padding: 4px;
 }
 
-#hvnaxhluuv .gt_left {
+#qxczbnmwnk .gt_left {
   text-align: left;
 }
 
-#hvnaxhluuv .gt_center {
+#qxczbnmwnk .gt_center {
   text-align: center;
 }
 
-#hvnaxhluuv .gt_right {
+#qxczbnmwnk .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#hvnaxhluuv .gt_font_normal {
+#qxczbnmwnk .gt_font_normal {
   font-weight: normal;
 }
 
-#hvnaxhluuv .gt_font_bold {
+#qxczbnmwnk .gt_font_bold {
   font-weight: bold;
 }
 
-#hvnaxhluuv .gt_font_italic {
+#qxczbnmwnk .gt_font_italic {
   font-style: italic;
 }
 
-#hvnaxhluuv .gt_super {
+#qxczbnmwnk .gt_super {
   font-size: 65%;
 }
 
-#hvnaxhluuv .gt_footnote_marks {
+#qxczbnmwnk .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 65%;
@@ -566,7 +566,7 @@ higher standard deviation observed.
 
 Note: two plots are included because displaying two types of numeric
 values that aren’t a one-to-one transformation (in this case raw numbers
-and percentages) is not advised.
+and percentages) in a single plot is not advised.
 
 ``` r
 ## Draw a plot of number of respondents for select health responses, select years, in MN

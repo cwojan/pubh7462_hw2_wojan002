@@ -18,6 +18,10 @@ library(DataExplorer)
 library(janitor)
 library(gt)
 
+## Working directory for .RMD
+knitr::opts_knit$set(echo = TRUE,
+                     root.dir = rprojroot::find_rstudio_root_file())
+
 ## Set knitr options
 knitr::opts_chunk$set(echo = TRUE)
 
@@ -116,7 +120,7 @@ brfss_331 <- brfss_clean %>%
 
 ```
 
-The following states featured 6 surveyed counties (or locations): `r names(which(summary(brfss_331$state) == 6))`
+The following states featured 6 surveyed counties (or locations) in 2004: `r names(which(summary(brfss_331$state) == 6))`
 
 #### 3.3.2
 
@@ -144,7 +148,7 @@ brfss_clean %>%
 
 ```
 
-The state with the highest mean number of counties observed via survey is New Jersey, with Florida having the second highest. Overall the number of counties observed in each state seems to increase slightly over time. Florida exhibits a strange pattern where 40+ counties were observed in 2007 and 2010.
+The state with the highest mean number of counties observed via survey is New Jersey, with Florida having the second highest. Overall the number of counties observed in each state seems to increase slightly over time. Florida exhibits a strange pattern where 40+ counties were observed in 2007 and 2010, which is many more than usual.
 
 #### 3.3.3
 
@@ -171,7 +175,7 @@ Overall, the three different years show fairly similar results for each response
 
 ### 3.3.4
 
-Note: two plots are included because displaying two types of numeric values that aren't a one-to-one transformation (in this case raw numbers and percentages) is not advised.
+Note: two plots are included because displaying two types of numeric values that aren't a one-to-one transformation (in this case raw numbers and percentages) in a single plot is not advised.
 
 ```{r prob_3.3.4, echo = TRUE}
 
