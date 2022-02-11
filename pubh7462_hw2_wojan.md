@@ -241,10 +241,10 @@ brfss_clean %>%
     geom_jitter(aes(x = response, y = num_respondents, color = response)) +
     geom_boxplot(aes(x = response, y = num_respondents, fill = response), alpha = 0.4) +
     facet_wrap(vars(year)) +
-    labs(x = "Response Type", y = "Number of Respondents", 
-         title = "Number of Selected Health Responses in Minnesota by Year") +
-    guides(color = guide_legend(title = "Response Type"),
-           fill = guide_legend(title = "Response Type"))
+    labs(x = "Self-Reported Overall Health", y = "Number of Individuals", 
+         title = "Health Statuses in MN Counties by Year: Number of Individuals") +
+    guides(color = guide_legend(title = "Self-Reported Overall Health"),
+           fill = guide_legend(title = "Self-Reported Overall Health"))
 ```
 
 ![](pubh7462_hw2_wojan_files/figure-gfm/prob_3.3.4-1.png)<!-- -->
@@ -260,10 +260,10 @@ brfss_clean %>%
     geom_jitter(aes(x = response, y = percent, color = response)) +
     geom_boxplot(aes(x = response, y = percent, fill = response), alpha = 0.4) +
     facet_wrap(vars(year)) +
-    labs(x = "Response Type", y = "Percent of Respondents", 
-         title = "Percent of Selected Health Responses in Minnesota by Year") +
-    guides(color = guide_legend(title = "Response Type"),
-           fill = guide_legend(title = "Response Type"))
+    labs(x = "Self-Reported Overall Health", y = "Percent of All Individuals (%)", 
+         title = "Health Statuses in MN Counties by Year: Percent") +
+    guides(color = guide_legend(title = "Self-Reported Overall Health"),
+           fill = guide_legend(title = "Self-Reported Overall Health"))
 ```
 
 ![](pubh7462_hw2_wojan_files/figure-gfm/prob_3.3.4-2.png)<!-- -->
